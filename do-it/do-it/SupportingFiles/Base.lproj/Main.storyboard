@@ -10,6 +10,36 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--View Controller-->
+        <scene sceneID="hLm-7C-9mu">
+            <objects>
+                <viewController id="ggv-m0-BfI" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="dro-8d-UTB">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="3cz-0d-WUK"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="o6Z-0t-rmB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="492" y="-579"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="zEg-0R-AZB">
+            <objects>
+                <viewController id="zBB-1x-Eek" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="VXB-zG-ACY">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="CYR-x2-bRM"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8kI-Zi-edc" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1601" y="-580"/>
+        </scene>
         <!--Main Screen View Controller-->
         <scene sceneID="77f-dY-tjl">
             <objects>
@@ -17,14 +47,53 @@
                     <view key="view" contentMode="scaleToFill" id="NtQ-oE-mI8">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="8aD-ps-dyu">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="TaskCell" rowHeight="115" id="eHl-Ad-jmz">
+                                        <rect key="frame" x="0.0" y="28" width="375" height="115"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="eHl-Ad-jmz" id="qPm-Yi-5gK">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="114.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="m9w-by-2Ib" firstAttribute="bottom" secondItem="8aD-ps-dyu" secondAttribute="bottom" id="AI6-ws-z0Z"/>
+                            <constraint firstItem="8aD-ps-dyu" firstAttribute="top" secondItem="m9w-by-2Ib" secondAttribute="top" id="Eff-vB-pn5"/>
+                            <constraint firstItem="m9w-by-2Ib" firstAttribute="trailing" secondItem="8aD-ps-dyu" secondAttribute="trailing" id="IDU-c6-b3L"/>
+                            <constraint firstItem="8aD-ps-dyu" firstAttribute="leading" secondItem="m9w-by-2Ib" secondAttribute="leading" id="fsW-fe-FHy"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="m9w-by-2Ib"/>
                     </view>
-                    <navigationItem key="navigationItem" id="xn0-6g-rgO"/>
+                    <navigationItem key="navigationItem" id="xn0-6g-rgO">
+                        <barButtonItem key="leftBarButtonItem" image="settings" id="JZp-1M-Eos">
+                            <color key="tintColor" red="0.075101976850000002" green="0.24459379210000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                            <connections>
+                                <action selector="didTapSettingsButton:" destination="Ud7-et-PnH" id="DH8-Yn-FKS"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" image="add" id="weI-5X-y4C">
+                            <color key="tintColor" red="0.56862745100000001" green="0.84705882349999995" blue="0.34509803919999998" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                            <connections>
+                                <action selector="didTapAddButton:" destination="Ud7-et-PnH" id="nvr-1V-5wv"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <segue destination="zBB-1x-Eek" kind="show" identifier="showAddTask" id="IAb-TF-gkK"/>
+                        <segue destination="ggv-m0-BfI" kind="show" identifier="showSettings" id="uxE-Xn-sFn"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OwS-3F-eTj" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="847" y="171"/>
+            <point key="canvasLocation" x="845.60000000000002" y="170.46476761619192"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="HWe-fh-GEO">
@@ -45,4 +114,8 @@
             <point key="canvasLocation" x="20" y="171"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="add" width="20" height="20"/>
+        <image name="settings" width="20" height="20"/>
+    </resources>
 </document>
