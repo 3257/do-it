@@ -19,7 +19,7 @@ extension Task {
 
     @NSManaged public var categoryColor: String?
     @NSManaged public var categoryName: String?
-    @NSManaged public var completionDate: NSDate?
+    @NSManaged public var completionDate: Date?
     @NSManaged public var isCompleted: Bool
     @NSManaged public var title: String?
 
@@ -35,9 +35,6 @@ extension Task {
         return managedObjectContext
     }
 
-    /// Retrieving all tasks saved in Core Data
-    ///
-    /// - Returns: the array of tasks
     static func loadTasks() -> [Task] {
         let managedContext = getContext()
 
@@ -49,24 +46,10 @@ extension Task {
         return []
     }
 
-
-    /// Retrieving Single Task from Core Data
-    ///
-    /// - Parameter position: position in the array on tasks
-    /// - Returns: the value at this position
     static func loadTask(position: Int) -> Task {
         return loadTasks()[position]
     }
 
-
-
-    /// Saving Single Task in Core Data
-    ///
-    /// - Parameters:
-    ///   - title: the title of the task
-    ///   - categoryName: the task's category name
-    ///   - categoryColor: the task's category color
-    ///   - isCompleted: the task's state
     static func saveTask(title: String, categoryName: String, categoryColor: String, completionDate: Date, isCompleted: Bool) {
         let tasks = loadTasks()
         let managedContext = getContext()
@@ -103,12 +86,6 @@ extension Task {
         }
     }
 
-
-    /// Deletes a single task
-    ///
-    /// - Parameters:
-    ///   - title: the title of the task to delete
-    ///   - completion: completion block
     static func deleteTask(title: String, completion: @escaping ()->()) {
         let managedContext = getContext()
 
@@ -127,12 +104,6 @@ extension Task {
         }
     }
 
-
-    /// Updating single task
-    ///
-    /// - Parameters:
-    ///   - title: the title of the task
-    ///   - completion: completion block
     static func markAsCompleted(title: String, completion: @escaping ()->()) {
         let managedContext = getContext()
 

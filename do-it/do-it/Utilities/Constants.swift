@@ -12,5 +12,8 @@ struct Constants {
     struct Identifiers {
         static let showAddTask = "showAddTask"
         static let showSettings = "showSettings"
+        static let taskCell = "TaskCell"
     }
+
+    static let categoryColors = ["ElectricGreen", "Green", "Orange", "Mustard", "Red", "Pink"]
 }
