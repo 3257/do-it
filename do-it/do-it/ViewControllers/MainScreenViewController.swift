@@ -23,16 +23,17 @@ class MainScreenViewController: UIViewController {
 
     // MARK: - Functions
     private func handleTaskDeletion(_ taskTitle: String) {
-        // Add alert controller
-        let alertController = UIAlertController(title: "Are you sure you want to delete \(taskTitle)?", message: nil, preferredStyle: .alert)
-        // Ok
-        let okAction = UIAlertAction(title: "Sure", style: .destructive, handler: { [unowned self] _ in
+        // Alert
+        let alertController = UIAlertController(title: "Are you sure you want to delete \(taskTitle.capitalized)?", message: nil, preferredStyle: .alert)
+
+        // Alert actions
+        let okAction = UIAlertAction(title: "Sure", style: .destructive, handler: { _ in
             self.deleteTask(by: taskTitle, completion: {
                 self.tasksTableView.reloadData()
             })
         })
-        // Cancel
         let cancelAction = UIAlertAction(title: "Nope", style: .cancel, handler: nil)
+
         // Add actions
         alertController.addAction(okAction)
         alertController.addAction(cancelAction)
@@ -50,10 +51,6 @@ class MainScreenViewController: UIViewController {
             }
         }
     }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
 }
 
 // MARK: - AddTaskViewControllerDelegate
@@ -62,7 +59,6 @@ extension MainScreenViewController: AddTaskViewControllerDelegate {
         tasksTableView.reloadData()
     }
 }
-
 
 // MARK: - UITableViewDelegate, UITableViewDataSource
 extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource {
@@ -76,18 +72,28 @@ extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource {
         return taskCell
     }
 
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: Constants.Identifiers.showAddTask, sender: loadTasks()[indexPath.row].title)
+    }
+
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // Enables editing only for the selected table view, if you have multiple table views
         return tableView == tasksTableView
     }
 
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        guard let taskTitle = self.loadTasks()[indexPath.row].title else  { return [] }
+        guard let taskTitle = loadTasks()[indexPath.row].title else  { return [] }
 
-        let delete = UITableViewRowAction(style: .destructive, title: "Delete") { (action, indexPath) in
+        // Local constants
+        let deleteTitle = "Delete"
+        let editTitle = "Edit"
+
+        // Add actions
+        let delete = UITableViewRowAction(style: .destructive, title: deleteTitle) { (action, indexPath) in
             self.handleTaskDeletion(taskTitle)
         }
-        let edit = UITableViewRowAction(style: .normal, title: "Edit") { (action, indexPath) in
+
+        let edit = UITableViewRowAction(style: .normal, title: editTitle) { (action, indexPath) in
             self.performSegue(withIdentifier: Constants.Identifiers.showAddTask, sender: taskTitle)
         }
         return [delete, edit]
@@ -96,9 +102,8 @@ extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource {
 // MARK: - Task functions
 extension MainScreenViewController {
     private func loadTasks() -> [Task] {
-        var tasks = Task.loadTasks()
-        tasks.sort { $0.isCompleted && !$1.isCompleted }
-        return tasks
+        // Return tasks with completed tasks at the front
+        return Task.loadTasks().sorted { $0.isCompleted && !$1.isCompleted }
     }
     private func deleteTask(by title: String, completion: @escaping () -> ()) {
         Task.deleteTask(title: title, completion: completion)

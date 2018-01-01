@@ -107,12 +107,20 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="CYR-x2-bRM"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Add Task" id="yvb-0B-hjV"/>
+                    <navigationItem key="navigationItem" title="Add Task" id="yvb-0B-hjV">
+                        <barButtonItem key="rightBarButtonItem" enabled="NO" systemItem="trash" id="zxe-L5-OgN">
+                            <color key="tintColor" red="0.7297603627" green="0.24009742680000001" blue="0.11625519500000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                            <connections>
+                                <action selector="didTapDeleteButton:" destination="zBB-1x-Eek" id="V4I-gW-Skd"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="categoryTextField" destination="AxI-r8-CfR" id="rOA-NM-jtZ"/>
                         <outlet property="colorPickerView" destination="vgp-H6-hna" id="ztM-oQ-YEz"/>
                         <outlet property="completionDatePicker" destination="F5i-YJ-9DQ" id="dYG-Mq-89I"/>
                         <outlet property="completionSegmentedControl" destination="nTF-Bd-ILs" id="DwS-ks-MDA"/>
+                        <outlet property="deleteBarButton" destination="zxe-L5-OgN" id="cST-Cp-jFj"/>
                         <outlet property="titleTextField" destination="wdh-4Z-Nwl" id="AET-w6-SNw"/>
                     </connections>
                 </viewController>

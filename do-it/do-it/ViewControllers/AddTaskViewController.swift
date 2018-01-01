@@ -13,17 +13,24 @@ protocol AddTaskViewControllerDelegate: class {
 }
 
 class AddTaskViewController: UIViewController {
-    
     // MARK: - Outlets and outlet functions
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var categoryTextField: UITextField!
     @IBOutlet weak var colorPickerView: UIPickerView!
     @IBOutlet weak var completionDatePicker: UIDatePicker!
     @IBOutlet weak var completionSegmentedControl: UISegmentedControl!
-
+    @IBOutlet weak var deleteBarButton: UIBarButtonItem!
+    
     @IBAction func didTapSaveButton(_ sender: UIButton) {
         // Edit task only if task title provided in segue
-        taskTitle != nil ? editTask() : saveTask()
+        taskTitle != nil ? editTask(completion: { self.updateAndPop() })
+                         : saveTask(completion: { self.updateAndPop() })
+    }
+
+    @IBAction func didTapDeleteButton(_ sender: UIBarButtonItem) {
+        if let taskTitle = taskTitle {
+            deleteTask(by: taskTitle) { self.updateAndPop() }
+        }
     }
 
     // MARK: - Variables
@@ -37,8 +44,15 @@ class AddTaskViewController: UIViewController {
     }()
 
     // MARK: - Functions
+    private func updateAndPop() {
+        delegate?.didUpdateTask()
+        navigationController?.popViewController(animated: true)
+    }
+
     private func updateUI(for taskTitle: String?) {
         if let taskTitle = taskTitle, let task = Task.loadTask(by: taskTitle) {
+            // Enable delete bar button
+            deleteBarButton.isEnabled = true
             // Enable all segments of completionSegmentedControl and disable titleTextField
             completionSegmentedControl.enableAllSegments()
             titleTextField.isEnabled = false
@@ -84,27 +98,23 @@ extension AddTaskViewController: UIPickerViewDelegate, UIPickerViewDataSource {
 
 // MARK: - Task Functions
 extension AddTaskViewController {
-    private func editTask() {
+    private func editTask(completion: @escaping () -> ()) {
         Task.editTask(title: titleTextField.text ?? "",
                         categoryName: categoryTextField.text ?? "",
                         categoryColor: selectedColor,
                         completionDate: completionDatePicker.date,
                         isCompleted: isTaskCompleted,
-                        completion: {
-                            self.delegate?.didUpdateTask()
-                            self.navigationController?.popViewController(animated: true)
-        })
+                        completion: completion)
     }
-    
-    private func saveTask() {
+    private func saveTask(completion: @escaping () -> ()) {
         Task.saveTask(title: titleTextField.text ?? "",
                       categoryName: categoryTextField.text ?? "",
                       categoryColor: selectedColor,
                       completionDate: completionDatePicker.date,
                       isCompleted: isTaskCompleted,
-                      completion: {
-                        self.delegate?.didUpdateTask()
-                        self.navigationController?.popViewController(animated: true)
-        })
+                      completion: completion)
+    }
+    private func deleteTask(by title: String, completion: @escaping () -> ()) {
+        Task.deleteTask(title: title, completion: completion)
     }
 }
