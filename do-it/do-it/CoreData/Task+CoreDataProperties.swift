@@ -50,7 +50,7 @@ extension Task {
         return loadTasks()[position]
     }
 
-    static func saveTask(title: String, categoryName: String, categoryColor: String, completionDate: Date, isCompleted: Bool) {
+    static func saveTask(title: String, categoryName: String, categoryColor: String, completionDate: Date, isCompleted: Bool, completion: @escaping ()->()) {
         let tasks = loadTasks()
         let managedContext = getContext()
 
@@ -65,6 +65,7 @@ extension Task {
 
             do {
                 try managedContext.save()
+                completion()
             } catch let error {
                 print("Could not save with \(error)")
             }

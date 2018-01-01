@@ -6,6 +6,10 @@
 //  Copyright © 2017 dido. All rights reserved.
 //
 
+protocol AddTaskViewControllerDelegate: class {
+    func didSaveTask()
+}
+
 import UIKit
 
 class AddTaskViewController: UIViewController {
@@ -17,10 +21,14 @@ class AddTaskViewController: UIViewController {
     @IBOutlet weak var completionDatePicker: UIDatePicker!
 
     @IBAction func didTapSaveButton(_ sender: UIButton) {
-        Task.saveTask(title: titleTextField.text ?? "", categoryName: categoryTextField.text ?? "", categoryColor: selectedColor, completionDate: completionDatePicker.date, isCompleted: false)
+        Task.saveTask(title: titleTextField.text ?? "", categoryName: categoryTextField.text ?? "", categoryColor: selectedColor, completionDate: completionDatePicker.date, isCompleted: false, completion: {
+            self.delegate?.didSaveTask()
+            self.navigationController?.popViewController(animated: true)
+        })
     }
 
     // MARK: - Variables
+    weak var delegate: AddTaskViewControllerDelegate?
     var selectedColor = Constants.categoryColors[0]
 
     // MARK: - View Lifecycle
