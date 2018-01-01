@@ -45,17 +45,20 @@ class MainScreenViewController: UIViewController {
         if segue.identifier == Constants.Identifiers.showAddTask,
             let addAddTaskVC = segue.destination as? AddTaskViewController {
             addAddTaskVC.delegate = self
+            if let taskID = sender as? Int {
+                addAddTaskVC.taskID = taskID
+            }
         }
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
     }
 }
 
 // MARK: - AddTaskViewControllerDelegate
 extension MainScreenViewController: AddTaskViewControllerDelegate {
-    func didSaveTask() {
+    func didUpdateTask() {
         tasksTableView.reloadData()
     }
 }
@@ -72,18 +75,23 @@ extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource {
         taskCell.task = loadTasks()[indexPath.row]
         return taskCell
     }
-
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // Enables editing only for the selected table view, if you have multiple table views
         return tableView == tasksTableView
     }
 
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            if let taskTitle = loadTasks()[indexPath.row].title {
-                handleTaskDeletion(taskTitle)
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let delete = UITableViewRowAction(style: .destructive, title: "Delete") { (action, indexPath) in
+            if let taskTitle = self.loadTasks()[indexPath.row].title {
+                self.handleTaskDeletion(taskTitle)
             }
         }
+
+        let edit = UITableViewRowAction(style: .normal, title: "Edit") { (action, indexPath) in
+            self.performSegue(withIdentifier: Constants.Identifiers.showAddTask, sender: indexPath.row)
+        }
+
+        return [delete, edit]
     }
 }
 

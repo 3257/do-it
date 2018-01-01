@@ -105,13 +105,17 @@ extension Task {
         }
     }
 
-    static func markAsCompleted(title: String, completion: @escaping ()->()) {
+    static func updateTask(title: String, categoryName: String, categoryColor: String, completionDate: Date, isCompleted: Bool, completion: @escaping ()->()) {
         let managedContext = getContext()
 
         do {
             let results = try managedContext.fetch(request)
-            let object = results.filter({ ($0 as AnyObject).title == title }).first as! Task
-            object.setValue(true, forKey: "isCompleted")
+            let task = results.filter({ ($0 as AnyObject).title == title }).first as! Task
+
+            task.setValue(categoryName, forKey: "categoryName")
+            task.setValue(categoryColor, forKey: "categoryColor")
+            task.setValue(completionDate, forKey: "completionDate")
+            task.setValue(isCompleted, forKey: "isCompleted")
             do {
                 try managedContext.save()
                 completion()
