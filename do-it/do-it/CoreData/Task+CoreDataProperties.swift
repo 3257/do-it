@@ -46,8 +46,11 @@ extension Task {
         return []
     }
 
-    static func loadTask(position: Int) -> Task {
-        return loadTasks()[position]
+    static func loadTask(by title: String) -> Task? {
+        if let indexToReturn = loadTasks().index(where: { $0.title == title }) {
+            return loadTasks()[indexToReturn]
+        }
+        return nil
     }
 
     static func saveTask(title: String, categoryName: String, categoryColor: String, completionDate: Date, isCompleted: Bool, completion: @escaping ()->()) {
@@ -105,7 +108,7 @@ extension Task {
         }
     }
 
-    static func updateTask(title: String, categoryName: String, categoryColor: String, completionDate: Date, isCompleted: Bool, completion: @escaping ()->()) {
+    static func editTask(title: String, categoryName: String, categoryColor: String, completionDate: Date, isCompleted: Bool, completion: @escaping ()->()) {
         let managedContext = getContext()
 
         do {

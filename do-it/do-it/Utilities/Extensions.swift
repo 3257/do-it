@@ -29,3 +29,11 @@ extension Date {
         return dateFormatter.string(from: self)
     }
 }
+
+extension UISegmentedControl {
+    func enableAllSegments() {
+        for i in 0..<self.numberOfSegments {
+            self.setEnabled(true, forSegmentAt: i)
+        }
+    }
+}
