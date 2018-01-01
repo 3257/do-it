@@ -12,6 +12,8 @@ class TaskTableViewCell: UITableViewCell {
 
     @IBOutlet weak var title: UILabel!
     @IBOutlet weak var completionDate: UILabel!
+    @IBOutlet weak var accessoryImageView: UIImageView!
+    @IBOutlet weak var categoryView: UIView!
 
     var task: Task? { didSet { updateUI() } }
 
@@ -19,10 +21,10 @@ class TaskTableViewCell: UITableViewCell {
         if let task = task {
             title.text = task.title
             if let taskCompletionDate = task.completionDate {
-                completionDate.text = (taskCompletionDate).toString(dateFormat: "dd-MMM-yyyy")
+                completionDate.text = "due \((taskCompletionDate).toString(dateFormat: "EEE., MMM dd, YY"))"
             }
-            backgroundColor = ColorPallete.getColor(for: task.categoryColor)
-            accessoryType = task.isCompleted ? .checkmark : .none
+            categoryView.backgroundColor = ColorPallete.getColor(for: task.categoryColor)
+            accessoryImageView.image = task.isCompleted ? #imageLiteral(resourceName: "approve-circular-button") : #imageLiteral(resourceName: "minus-sign-in-a-circle")
         }
     }
 }

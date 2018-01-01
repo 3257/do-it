@@ -13,6 +13,7 @@ protocol AddTaskViewControllerDelegate: class {
 }
 
 class AddTaskViewController: UIViewController {
+
     // MARK: - Outlets and outlet functions
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var categoryTextField: UITextField!
@@ -56,7 +57,7 @@ class AddTaskViewController: UIViewController {
             // Enable all segments of completionSegmentedControl and disable titleTextField
             completionSegmentedControl.enableAllSegments()
             titleTextField.isEnabled = false
-            titleTextField.backgroundColor = .lightGray
+            titleTextField.textColor = .lightGray
 
             // Update relevant UI
             titleTextField.text = task.title
@@ -73,6 +74,7 @@ class AddTaskViewController: UIViewController {
     // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        completionDatePicker.setValue(UIColor.white, forKeyPath: "textColor")
         updateUI(for: taskTitle)
     }
 }
@@ -86,9 +88,9 @@ extension AddTaskViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return Constants.categoryColors.count
     }
-
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return Constants.categoryColors[row]
+    func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
+        let attributedString = NSAttributedString(string: Constants.categoryColors[row], attributes: [NSAttributedStringKey.foregroundColor : UIColor.white])
+        return attributedString
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {

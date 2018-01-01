@@ -98,6 +98,20 @@ extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource {
         }
         return [delete, edit]
     }
+
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        if targetContentOffset.pointee.y < scrollView.contentOffset.y {
+            // up
+            if navigationController?.navigationBar.prefersLargeTitles == true {
+                navigationController?.navigationBar.prefersLargeTitles = false
+            }
+        } else {
+            // down
+            if navigationController?.navigationBar.prefersLargeTitles == false {
+                navigationController?.navigationBar.prefersLargeTitles = true
+            }
+        }
+    }
 }
 // MARK: - Task functions
 extension MainScreenViewController {
