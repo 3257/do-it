@@ -37,3 +37,44 @@ extension UISegmentedControl {
         }
     }
 }
+
+extension UIWindow {
+    // Extension to make sure that the alert presented is always at the forefront VC
+    var visibleViewController: UIViewController? {
+        return UIWindow.getVisibleViewControllerFrom(self.rootViewController)
+    }
+
+    static func getVisibleViewControllerFrom(_ vc: UIViewController?) -> UIViewController? {
+        if let nc = vc as? UINavigationController {
+            return UIWindow.getVisibleViewControllerFrom(nc.visibleViewController)
+        } else if let tc = vc as? UITabBarController {
+            return UIWindow.getVisibleViewControllerFrom(tc.selectedViewController)
+        } else {
+            if let pvc = vc?.presentedViewController {
+                return UIWindow.getVisibleViewControllerFrom(pvc)
+            } else {
+                return vc
+            }
+        }
+    }
+}
+
+extension Sequence {
+    /**
+     Returns a tuple with 2 arrays.
+     The first array (the slice) contains the elements of self that match the predicate.
+     The second array (the remainder) contains the elements of self that do not match the predicate.
+     */
+    func divide(predicate: (Self.Element) -> Bool) -> [[Self.Element]] {
+        var slice:     [Self.Element] = []
+        var remainder: [Self.Element] = []
+        forEach {
+            switch predicate($0) {
+            case true  : slice.append($0)
+            case false : remainder.append($0)
+            }
+        }
+        return [slice, remainder]
+    }
+
+}

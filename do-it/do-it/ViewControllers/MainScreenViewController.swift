@@ -23,20 +23,26 @@ class MainScreenViewController: UIViewController {
 
     // MARK: - Functions
     private func handleTaskDeletion(_ taskTitle: String) {
+        // Local constants
+        let areYouSureTitle = "Are you sure you want to delete \(taskTitle.capitalized)?"
+        let sureTitle = "Sure"
+        let notSure = "Nope"
+
         // Alert
-        let alertController = UIAlertController(title: "Are you sure you want to delete \(taskTitle.capitalized)?", message: nil, preferredStyle: .alert)
+        let alertController = UIAlertController(title: areYouSureTitle, message: nil, preferredStyle: .alert)
 
         // Alert actions
-        let okAction = UIAlertAction(title: "Sure", style: .destructive, handler: { _ in
+        let okAction = UIAlertAction(title: sureTitle, style: .destructive, handler: { _ in
             self.deleteTask(by: taskTitle, completion: {
                 self.tasksTableView.reloadData()
             })
         })
-        let cancelAction = UIAlertAction(title: "Nope", style: .cancel, handler: nil)
+        let cancelAction = UIAlertAction(title: notSure, style: .cancel, handler: nil)
 
         // Add actions
         alertController.addAction(okAction)
         alertController.addAction(cancelAction)
+        
         // Present
         present(alertController, animated: true, completion: nil)
     }
@@ -62,18 +68,29 @@ extension MainScreenViewController: AddTaskViewControllerDelegate {
 
 // MARK: - UITableViewDelegate, UITableViewDataSource
 extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return loadTasksDivided().count
+    }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return loadTasks().count
+        return loadTasksDivided()[section].count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let taskCell = tableView.dequeueReusableCell(withIdentifier: Constants.Identifiers.taskCell, for: indexPath) as! TaskTableViewCell
-        taskCell.task = loadTasks()[indexPath.row]
+        taskCell.task = loadTasksDivided()[indexPath.section][indexPath.row]
         return taskCell
     }
 
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        let headerTitles = ["Completed", "Not Completed"]
+        if section < headerTitles.count {
+            return headerTitles[section]
+        }
+        return nil
+    }
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: Constants.Identifiers.showAddTask, sender: loadTasks()[indexPath.row].title)
+        performSegue(withIdentifier: Constants.Identifiers.showAddTask, sender: loadTasksDivided()[indexPath.section][indexPath.row].title)
     }
 
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -82,7 +99,7 @@ extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        guard let taskTitle = loadTasks()[indexPath.row].title else  { return [] }
+        guard let taskTitle = loadTasksDivided()[indexPath.section][indexPath.row].title else { return [] }
 
         // Local constants
         let deleteTitle = "Delete"
@@ -98,26 +115,16 @@ extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource {
         }
         return [delete, edit]
     }
-
-    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        if targetContentOffset.pointee.y < scrollView.contentOffset.y {
-            // up
-            if navigationController?.navigationBar.prefersLargeTitles == true {
-                navigationController?.navigationBar.prefersLargeTitles = false
-            }
-        } else {
-            // down
-            if navigationController?.navigationBar.prefersLargeTitles == false {
-                navigationController?.navigationBar.prefersLargeTitles = true
-            }
-        }
-    }
 }
+
 // MARK: - Task functions
 extension MainScreenViewController {
     private func loadTasks() -> [Task] {
         // Return tasks with completed tasks at the front
         return Task.loadTasks().sorted { $0.isCompleted && !$1.isCompleted }
+    }
+    private func loadTasksDivided() -> [[Task]] {
+        return Task.loadTasks().divide { $0.isCompleted }
     }
     private func deleteTask(by title: String, completion: @escaping () -> ()) {
         Task.deleteTask(title: title, completion: completion)

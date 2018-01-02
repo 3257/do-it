@@ -62,7 +62,7 @@ class AddTaskViewController: UIViewController {
             // Update relevant UI
             titleTextField.text = task.title
             categoryTextField.text = task.categoryName
-            selectedColor = task.categoryColor ?? "Gray"
+            selectedColor = task.categoryColor ?? "Green"
             if let colorPickerViewIndex = Constants.categoryColors.index(where: { $0 == task.categoryColor }) {
                 colorPickerView.selectRow(colorPickerViewIndex, inComponent: 0, animated: true)
             }
@@ -74,7 +74,6 @@ class AddTaskViewController: UIViewController {
     // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        completionDatePicker.setValue(UIColor.white, forKeyPath: "textColor")
         updateUI(for: taskTitle)
     }
 }
@@ -89,7 +88,7 @@ extension AddTaskViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         return Constants.categoryColors.count
     }
     func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
-        let attributedString = NSAttributedString(string: Constants.categoryColors[row], attributes: [NSAttributedStringKey.foregroundColor : UIColor.white])
+        let attributedString = NSAttributedString(string: Constants.categoryColors[row], attributes: [NSAttributedStringKey.foregroundColor : UIColor.black])
         return attributedString
     }
     
@@ -101,16 +100,40 @@ extension AddTaskViewController: UIPickerViewDelegate, UIPickerViewDataSource {
 // MARK: - Task Functions
 extension AddTaskViewController {
     private func editTask(completion: @escaping () -> ()) {
-        Task.editTask(title: titleTextField.text ?? "",
-                        categoryName: categoryTextField.text ?? "",
-                        categoryColor: selectedColor,
-                        completionDate: completionDatePicker.date,
-                        isCompleted: isTaskCompleted,
-                        completion: completion)
+        // Local constants
+        let provideTaskAllert = "You must provide a title for the task!"
+        let provideCategoryAllert = "You must provide a category for the task!"
+
+        guard let title = titleTextField.text, title != "" else {
+            Validator.addOkAllert(provideTaskAllert)
+            return
+        }
+        guard let category = categoryTextField.text, category != "" else {
+            Validator.addOkAllert(provideCategoryAllert)
+            return
+        }
+        Task.editTask(title: title,
+                      categoryName: category,
+                      categoryColor: selectedColor,
+                      completionDate: completionDatePicker.date,
+                      isCompleted: isTaskCompleted,
+                      completion: completion)
     }
     private func saveTask(completion: @escaping () -> ()) {
-        Task.saveTask(title: titleTextField.text ?? "",
-                      categoryName: categoryTextField.text ?? "",
+        // Local constants
+        let provideTaskAllert = "You must provide a title for the task!"
+        let provideCategoryAllert = "You must provide a category for the task!"
+
+        guard let title = titleTextField.text, title != "" else {
+            Validator.addOkAllert(provideTaskAllert)
+            return
+        }
+        guard let category = categoryTextField.text, category != "" else {
+            Validator.addOkAllert(provideCategoryAllert)
+            return
+        }
+        Task.saveTask(title: title,
+                      categoryName: category,
                       categoryColor: selectedColor,
                       completionDate: completionDatePicker.date,
                       isCompleted: isTaskCompleted,
