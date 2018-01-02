@@ -14,18 +14,46 @@
         <!--Settings-->
         <scene sceneID="hLm-7C-9mu">
             <objects>
-                <viewController id="ggv-m0-BfI" sceneMemberID="viewController">
+                <viewController id="ggv-m0-BfI" customClass="SettingsViewController" customModule="do_it" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="dro-8d-UTB">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="LYp-Cc-laE">
+                                <rect key="frame" x="0.0" y="366" width="375" height="51.5"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enable/Disable Local Notifications" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="u7z-a8-p79">
+                                        <rect key="frame" x="58" y="0.0" width="259.5" height="20.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="ysZ-Ws-KAD">
+                                        <rect key="frame" x="163" y="20.5" width="51" height="31"/>
+                                        <connections>
+                                            <action selector="didTapSwitch:" destination="ggv-m0-BfI" eventType="valueChanged" id="1V5-Pg-kyw"/>
+                                        </connections>
+                                    </switch>
+                                </subviews>
+                            </stackView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="LYp-Cc-laE" firstAttribute="centerX" secondItem="3cz-0d-WUK" secondAttribute="centerX" id="3Ji-oR-a38"/>
+                            <constraint firstItem="3cz-0d-WUK" firstAttribute="trailing" secondItem="LYp-Cc-laE" secondAttribute="trailing" id="D5x-M9-emV"/>
+                            <constraint firstItem="LYp-Cc-laE" firstAttribute="centerY" secondItem="3cz-0d-WUK" secondAttribute="centerY" id="GuE-kw-HlJ"/>
+                            <constraint firstItem="LYp-Cc-laE" firstAttribute="leading" secondItem="dro-8d-UTB" secondAttribute="leading" id="Lew-oq-pVT"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="3cz-0d-WUK"/>
                     </view>
                     <navigationItem key="navigationItem" title="Settings" id="X4w-Ph-8mA"/>
+                    <connections>
+                        <outlet property="localNotificarionsSwitch" destination="ysZ-Ws-KAD" id="kND-fH-lUp"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="o6Z-0t-rmB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="492" y="-579"/>
+            <point key="canvasLocation" x="492" y="-579.76011994002999"/>
         </scene>
         <!--Add Task-->
         <scene sceneID="zEg-0R-AZB">
